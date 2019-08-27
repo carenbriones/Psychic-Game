@@ -7,6 +7,7 @@ var guessesLeft = maxGuesses;
 var lettersGuessed = [];
 
 var keyPressed = KeyboardEvent;
+var characters = "abcdefghijklmnopqrstuvwxyz";
 var correctLetter = generateRandomLetter();
 
 document.addEventListener('keypress', guessLetter);
@@ -15,26 +16,29 @@ function guessLetter(keyPressed) {
     var letterGuessed = keyPressed.key;
     console.log(correctLetter);
 
-    // If letter guessed is incorrect
-    if (letterGuessed !== correctLetter) {
-        
-        // If letter has not been guessed already
-        if (lettersGuessed.indexOf(letterGuessed) === -1) {
-            lettersGuessed.push(letterGuessed);
-            guessesLeft--;
+    // Only runs if a letter key is pressed
+    if (characters.includes(letterGuessed)) {
+        // If letter guessed is incorrect
+        if (letterGuessed !== correctLetter) {
 
-            // If there are no guesses left, user loses
-            if (guessesLeft === 0) {
-                resetGame();
-                losses++;
+            // If letter has not been guessed already
+            if (lettersGuessed.indexOf(letterGuessed) === -1) {
+                lettersGuessed.push(letterGuessed);
+                guessesLeft--;
+
+                // If there are no guesses left, user loses
+                if (guessesLeft === 0) {
+                    resetGame();
+                    losses++;
+                }
             }
+        } else { // If user guesses correct letter, user wins
+            wins++;
+            console.log("winner!");
+            resetGame();
         }
-    } else { // If user guesses correct letter
-        wins++;
-        console.log("winner!");
-        resetGame();
+        printStats();
     }
-    printStats();
 }
 
 function printStats() {
@@ -55,12 +59,11 @@ function printStats() {
 
 //Retrieved from https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
 function generateRandomLetter() {
-    var characters = 'abcdefghijklmnopqrstuvwxyz';
     var result = characters[Math.floor(Math.random() * characters.length)];
     return result;
- }
+}
 
-function resetGame(){
+function resetGame() {
     guessesLeft = maxGuesses;
     lettersGuessed = [];
     correctLetter = generateRandomLetter();
